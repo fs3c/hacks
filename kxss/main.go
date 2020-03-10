@@ -45,13 +45,13 @@ func main() {
 	appendChecks := makePool(initialChecks, func(c paramCheck, output chan paramCheck) {
 		reflected, err := checkReflected(c.url)
 		if err != nil {
-			//fmt.Fprintf(os.Stderr, "error from checkReflected: %s\n", err)
+			fmt.Fprintf(os.Stderr, "error from checkReflected: %s\n", err)
 			return
 		}
 
 		if len(reflected) == 0 {
 			// TODO: wrap in verbose mode
-			//fmt.Printf("no params were reflected in %s\n", c.url)
+			fmt.Printf("no params were reflected in %s\n", c.url)
 			return
 		}
 
@@ -73,7 +73,7 @@ func main() {
 	})
 
 	done := makePool(charChecks, func(c paramCheck, output chan paramCheck) {
-		for _, char := range []string{"\"", "'", "<", ">"} {
+		for _, char := range []string{"\"", "'", "<", ">","%","$","`",".","{7*7}","{{7*7}}"} {
 			wasReflected, err := checkAppend(c.url, c.param, "aprefix"+char+"asuffix")
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error from checkAppend for url %s with param %s with %s: %s", c.url, c.param, char, err)
